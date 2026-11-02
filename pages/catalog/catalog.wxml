@@ -1,0 +1,161 @@
+<view class="page safe-bottom {{selectionMode ? 'selection-page' : ''}} {{appearanceClass}}" style="{{rootStyle}}">
+    <view class="subject-tabs">
+        <view
+            wx:for="{{subjects}}"
+            wx:key="id"
+            class="subject-tab {{subjectId === item.id ? 'subject-tab-active' : ''}}"
+            data-id="{{item.id}}"
+            bindtap="switchSubject"
+        >
+            <text class="subject-tab-name">{{item.short}}</text>
+            <text class="subject-tab-total">{{item.total}}</text>
+        </view>
+    </view>
+    <view class="page-header">
+        <view>
+            <text class="page-title">题库目录</text>
+            <text class="page-subtitle">共 {{total}} 道题 · 按章节整理</text>
+        </view>
+        <view class="result-summary">
+            <text class="result-number">{{filteredCount}}</text>
+            <text class="result-unit">道</text>
+        </view>
+    </view>
+
+    <view class="session-context" wx:if="{{activeSessionTitle}}">
+        <view class="session-context-icon">续</view>
+        <view class="session-context-copy">
+            <text class="session-context-title">正在练习：{{activeSessionTitle}}</text>
+            <text class="session-context-text">当前第 {{activeSessionProgress}} 题 · 本组题目可直接跳转</text>
+        </view>
+    </view>
+
+    <view class="search-box">
+        <text class="search-icon">⌕</text>
+        <input
+            class="search-input"
+            value="{{keyword}}"
+            placeholder="搜索题号、题干关键词或章节"
+            placeholder-class="search-placeholder"
+            confirm-type="search"
+            bindinput="handleSearchInput"
+        />
+        <view class="search-clear" wx:if="{{keyword}}" bindtap="clearSearch">×</view>
+    </view>
+
+    <view class="filter-row">
+        <view
+            class="filter-item {{item.active ? 'filter-active' : ''}}"
+            wx:for="{{filters}}"
+            wx:key="key"
+            data-filter="{{item.key}}"
+            bindtap="selectFilter"
+            hover-class="tap-hover"
+        >
+            <text>{{item.label}}</text>
+            <text class="filter-count">{{item.count}}</text>
+        </view>
+    </view>
+
+    <view class="export-tools">
+        <view class="export-tools-copy">
+            <text class="export-tools-title">资料导出</text>
+            <text class="export-tools-note">Word · 含答案与解析</text>
+        </view>
+        <view class="export-tool" bindtap="exportWrongQuestions">
+            <text>导出错题</text>
+            <text class="export-tool-count">{{wrongTotal}}</text>
+        </view>
+        <view class="export-tool {{selectionMode ? 'export-tool-active' : ''}}" bindtap="toggleSelectionMode">{{selectionMode ? '退出多选' : '选择题目'}}</view>
+    </view>
+
+    <view class="list-caption">
+        <text>{{keyword ? '搜索结果' : '章节目录'}}</text>
+        <text class="caption-count">显示 {{filteredCount}} 题</text>
+    </view>
+
+    <view class="empty-state" wx:if="{{isEmpty}}">
+        <view class="empty-icon">目</view>
+        <text class="empty-title">{{emptyTitle}}</text>
+        <text class="empty-description">{{emptyHint}}</text>
+        <button class="ghost-button empty-button" bindtap="resetDirectory">查看全部题目</button>
+    </view>
+
+    <view class="chapter-list" wx:else>
+        <view class="chapter-card card" wx:for="{{chapters}}" wx:for-item="chapter" wx:key="name">
+            <view class="chapter-header" data-name="{{chapter.name}}" bindtap="toggleChapter" hover-class="tap-hover">
+                <view class="chapter-heading">
+                    <view class="chapter-title-row">
+                        <text class="chapter-title">{{chapter.name}}</text>
+                        <text class="match-tag" wx:if="{{chapter.matched !== chapter.total}}">命中 {{chapter.matched}}</text>
+                    </view>
+                    <view class="chapter-meta">
+                        <text>共 {{chapter.total}} 题</text>
+                        <text class="meta-separator">·</text>
+                        <text>已做 {{chapter.done}}</text>
+                        <text class="meta-separator">·</text>
+                        <text class="chapter-wrong-count">错题 {{chapter.wrong}}</text>
+                    </view>
+                </view>
+                <view class="chapter-toggle">
+                    <text class="chapter-percent">{{chapter.progress}}%</text>
+                    <text class="chapter-chevron {{chapter.isExpanded ? 'chevron-open' : ''}}">›</text>
+                </view>
+            </view>
+
+            <view class="chapter-progress-track">
+                <view class="chapter-progress-value" style="width: {{chapter.progress}}%;"></view>
+            </view>
+
+            <view class="question-list" wx:if="{{chapter.isExpanded}}">
+                <view
+                    class="question-row {{question.isSelected ? 'question-selected' : ''}}"
+                    wx:for="{{chapter.questions}}"
+                    wx:for-item="question"
+                    wx:key="id"
+                    data-id="{{question.id}}"
+                    bindtap="handleQuestionTap"
+                >
+                    <view class="select-check {{question.isSelected ? 'checked' : ''}}" wx:if="{{selectionMode}}">
+                        <text class="check-mark" wx:if="{{question.isSelected}}">✓</text>
+                    </view>
+                    <view class="question-main">
+                        <view class="question-meta">
+                            <text class="question-id">#{{question.id}}</text>
+                            <text class="type-tag">{{question.typeText}}</text>
+                            <text class="current-tag" wx:if="{{question.isCurrent}}">当前</text>
+                        </view>
+                        <text class="question-summary">{{question.summary}}</text>
+                    </view>
+                    <view class="question-side">
+                        <view class="status-tag {{question.statusClass}}">{{question.statusText}}</view>
+                        <view
+                            class="restore-button"
+                            wx:if="{{question.isSlashed}}"
+                            data-id="{{question.id}}"
+                            catchtap="restoreQuestion"
+                            hover-class="tap-hover"
+                        >恢复</view>
+                        <text class="favorite-mark" wx:if="{{question.isFavorite}}">★</text>
+                    </view>
+                </view>
+            </view>
+
+            <view class="chapter-collapsed" wx:else data-name="{{chapter.name}}" bindtap="toggleChapter">
+                <text>点击展开本章 {{chapter.matched}} 道题</text>
+                <text class="collapsed-arrow">↓</text>
+            </view>
+        </view>
+    </view>
+
+    <view class="page-note">题干摘要自动截取，原题号、答案与解析保持不变</view>
+
+    <view class="selection-bar" wx:if="{{selectionMode}}">
+        <view class="selection-summary">
+            <text class="selection-number">{{selectedCount}}</text>
+            <text> 题已选</text>
+        </view>
+        <view class="select-all-action" bindtap="toggleSelectAllVisible">{{allVisibleSelected ? '取消全选' : '全选结果'}}</view>
+        <button class="primary-button export-selected" disabled="{{!selectedCount || exporting}}" bindtap="exportSelectedQuestions">导出 Word</button>
+    </view>
+</view>

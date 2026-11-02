@@ -1,0 +1,707 @@
+/* 答题页 · 试卷版式 */
+
+.page {
+    min-height: 100vh;
+    padding: 20rpx 30rpx 200rpx;
+}
+
+/* 载入 / 空状态 */
+.state-view {
+    display: flex;
+    padding: 150rpx 40rpx;
+    align-items: center;
+    flex-direction: column;
+}
+
+.state-icon {
+    display: flex;
+    width: 76rpx;
+    height: 76rpx;
+    align-items: center;
+    justify-content: center;
+    border: 2rpx solid var(--line-2);
+    border-radius: 2rpx;
+    color: var(--ink-2);
+    font-size: 32rpx;
+}
+
+.state-title {
+    margin-top: 22rpx;
+    color: var(--ink);
+    font-size: 30rpx;
+    font-weight: 600;
+}
+
+.state-description {
+    margin-top: 8rpx;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 22rpx;
+    line-height: 1.8;
+    text-align: center;
+}
+
+.state-button {
+    margin-top: 30rpx;
+    width: 300rpx;
+}
+
+/* 本轮完成 */
+.finish-view {
+    display: flex;
+    padding: 70rpx 20rpx 0;
+    align-items: center;
+    flex-direction: column;
+}
+
+.finish-badge {
+    display: flex;
+    height: 46rpx;
+    padding: 0 16rpx;
+    align-items: center;
+    border: 2rpx solid var(--ink);
+    border-radius: 2rpx;
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 19rpx;
+    letter-spacing: 3rpx;
+}
+
+.finish-title {
+    margin-top: 22rpx;
+    color: var(--ink);
+    font-size: 40rpx;
+    font-weight: 700;
+}
+
+.finish-subtitle {
+    margin-top: 6rpx;
+    color: var(--ink-3);
+    font-size: 22rpx;
+}
+
+.finish-stats {
+    display: flex;
+    width: 100%;
+    margin-top: 30rpx;
+    padding: 24rpx 0;
+    border-top: 2rpx solid var(--line-2);
+    border-bottom: 2rpx solid var(--line-2);
+    border-radius: 0;
+}
+
+.finish-stat {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    flex-direction: column;
+}
+
+.finish-stat + .finish-stat {
+    border-left: 2rpx solid var(--line);
+}
+
+.finish-value {
+    color: var(--ink);
+    font-size: 42rpx;
+    font-weight: 700;
+}
+
+.finish-label {
+    margin-top: 2rpx;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 19rpx;
+}
+
+.finish-button {
+    width: 100%;
+    margin-top: 18rpx;
+}
+
+/* 顶部 */
+.practice-header {
+    display: flex;
+    padding: 6rpx 0 14rpx;
+    align-items: flex-start;
+    justify-content: space-between;
+    border-bottom: 2rpx solid var(--line);
+}
+
+.practice-heading {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.practice-title {
+    color: var(--ink);
+    font-size: 26rpx;
+    font-weight: 600;
+    line-height: 1.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.practice-progress-copy {
+    margin-top: 2rpx;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 19rpx;
+}
+
+.practice-actions {
+    display: flex;
+    margin-left: 12rpx;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.catalog-button,
+.favorite-button {
+    display: flex;
+    height: 60rpx;
+    margin-left: 12rpx;
+    padding: 0 14rpx;
+    align-items: center;
+    border: 2rpx solid var(--line-2);
+    border-radius: 2rpx;
+    background: transparent;
+    color: var(--ink-2);
+    font-family: var(--font-sans);
+    font-size: 19rpx;
+    white-space: nowrap;
+}
+
+.favorite-star {
+    margin-right: 4rpx;
+    font-size: 20rpx;
+}
+
+.favorite-active {
+    border-color: var(--warn);
+    color: var(--warn);
+}
+
+.favorite-active .favorite-star {
+    color: var(--warn);
+}
+
+/* 题卡 */
+.question-card {
+    margin-top: 20rpx;
+    padding: 28rpx 26rpx 30rpx;
+    border-radius: 2rpx;
+}
+
+.question-meta {
+    display: flex;
+    align-items: baseline;
+}
+
+.question-number {
+    color: var(--accent);
+    font-size: 34rpx;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.question-number::after {
+    content: ".";
+}
+
+.question-total {
+    margin-left: 8rpx;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 19rpx;
+}
+
+.question-meta .type-tag {
+    margin-left: auto;
+}
+
+.chapter-name {
+    display: block;
+    margin-top: 10rpx;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 19rpx;
+    line-height: 1.6;
+}
+
+.question-text {
+    display: block;
+    margin-top: 12rpx;
+    color: var(--ink);
+    font-size: var(--fs-q);
+    font-weight: 400;
+    line-height: 1.9;
+}
+
+.multi-tip {
+    margin-top: 14rpx;
+    padding: 8rpx 14rpx;
+    border-left: 6rpx solid var(--warn);
+    background: var(--warn-soft);
+    color: var(--warn);
+    font-family: var(--font-sans);
+    font-size: 19rpx;
+}
+
+/* 选项 */
+.options-list {
+    margin-top: 22rpx;
+}
+
+.option {
+    display: flex;
+    margin-bottom: 12rpx;
+    padding: 18rpx 18rpx;
+    align-items: flex-start;
+    border: 2rpx solid var(--line);
+    border-radius: 2rpx;
+    background: var(--surface);
+}
+
+.option-marker {
+    display: flex;
+    width: 38rpx;
+    height: 38rpx;
+    margin-right: 14rpx;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 2rpx solid var(--line-2);
+    border-radius: 2rpx;
+    color: var(--ink-3);
+    font-size: 21rpx;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.option-body {
+    flex: 1;
+    padding-top: 1rpx;
+}
+
+.option-text {
+    display: block;
+    color: var(--ink);
+    font-size: var(--fs-o);
+    line-height: 1.75;
+}
+
+.option-selected {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+}
+
+.option-selected .option-marker {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--accent-ink);
+}
+
+.option-correct {
+    border-color: var(--ok-edge);
+    background: var(--ok-soft);
+}
+
+.option-correct .option-marker {
+    border-color: var(--ok);
+    background: var(--ok);
+    color: var(--surface);
+}
+
+.option-wrong {
+    border-color: var(--bad-edge);
+    background: var(--bad-soft);
+}
+
+.option-wrong .option-marker {
+    border-color: var(--bad);
+    background: var(--bad);
+    color: var(--surface);
+}
+
+/* 逐项解析 */
+
+
+
+
+
+
+
+.confirm-button {
+    margin-top: 10rpx;
+    width: 100%;
+}
+
+/* 判题结果：定理框 */
+.feedback {
+    margin-top: 22rpx;
+    padding: 20rpx 20rpx 22rpx;
+    border: 0;
+    border-left: 8rpx solid var(--ink);
+    border-radius: 0;
+    background: var(--surface-2);
+}
+
+.feedback-correct {
+    border-left-color: var(--ok);
+    background: var(--ok-soft);
+}
+
+.feedback-wrong {
+    border-left-color: var(--bad);
+    background: var(--bad-soft);
+}
+
+.feedback-heading {
+    display: flex;
+    align-items: baseline;
+}
+
+.feedback-icon {
+    width: 32rpx;
+    margin-right: 10rpx;
+    color: var(--ink);
+    font-size: 24rpx;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.feedback-correct .feedback-icon {
+    color: var(--ok);
+}
+
+.feedback-wrong .feedback-icon {
+    color: var(--bad);
+}
+
+.feedback-title {
+    color: var(--ink);
+    font-size: 27rpx;
+    font-weight: 700;
+    letter-spacing: 1rpx;
+}
+
+.answer-row {
+    display: flex;
+    margin-top: 12rpx;
+    align-items: baseline;
+}
+
+.answer-label {
+    width: 120rpx;
+    flex-shrink: 0;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 19rpx;
+}
+
+.answer-value {
+    font-size: 25rpx;
+    font-weight: 700;
+    letter-spacing: 3rpx;
+}
+
+.correct-text {
+    color: var(--ok);
+}
+
+.wrong-text {
+    color: var(--bad);
+}
+
+/* 解题思路 */
+
+
+
+/* 记忆小注 */
+.memory-tip {
+    margin-top: 18rpx;
+    padding: 14rpx 16rpx;
+    border-left: 6rpx solid var(--mark);
+    background: var(--warn-soft);
+}
+
+.memory-tip-heading {
+    display: flex;
+    align-items: baseline;
+}
+
+
+.memory-tip-title {
+    color: var(--mark);
+    font-family: var(--font-sans);
+    font-size: 19rpx;
+    font-weight: 600;
+    letter-spacing: 3rpx;
+}
+
+.memory-tip-text {
+    display: block;
+    margin-top: 6rpx;
+    color: var(--ink-2);
+    font-size: var(--fs-n);
+    line-height: 1.85;
+}
+
+/* 底部操作 */
+.bottom-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    padding: 16rpx 30rpx calc(16rpx + env(safe-area-inset-bottom));
+    align-items: center;
+    border-top: 2rpx solid var(--line-2);
+    background: var(--surface);
+}
+
+.nav-button {
+    display: flex;
+    flex: 1;
+    height: 84rpx;
+    padding: 0 22rpx;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4rpx;
+    font-family: var(--font-sans);
+    font-size: 26rpx;
+    letter-spacing: 2rpx;
+    line-height: 1;
+}
+
+/* 上一题 / 下一题：同一套描边样式，跟随主题强调色 */
+.nav-secondary {
+    border: 2rpx solid var(--accent-line);
+    background: var(--surface);
+    color: var(--accent);
+}
+
+.nav-pressed {
+    opacity: 0.8;
+}
+
+.nav-secondary[disabled] {
+    border-color: var(--line);
+    background: transparent;
+    color: var(--ink-3);
+    opacity: 0.55;
+}
+
+.bottom-position {
+    width: 116rpx;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 19rpx;
+    text-align: center;
+}
+
+.nav-button.primary-button {
+    max-width: 280rpx;
+}
+
+/* 斩题按钮 */
+.slash-button {
+    display: flex;
+    width: 60rpx;
+    height: 60rpx;
+    margin-left: 12rpx;
+    align-items: center;
+    justify-content: center;
+    border: 2rpx solid var(--line-2);
+    border-radius: 2rpx;
+    color: var(--ink-2);
+    font-family: var(--font-sans);
+    font-size: 21rpx;
+    white-space: nowrap;
+}
+
+.slash-active {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--accent-ink);
+}
+
+.favorite-button {
+    width: 60rpx;
+    height: 60rpx;
+    padding: 0;
+    justify-content: center;
+    font-size: 24rpx;
+}
+
+/* 解析开关 */
+.explain-toggle {
+    display: flex;
+    width: 100%;
+    height: 76rpx;
+    margin-top: 20rpx;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-top: 2rpx solid var(--line);
+    border-radius: 0;
+    background: transparent;
+    color: var(--accent);
+    font-family: var(--font-sans);
+    font-size: 22rpx;
+    letter-spacing: 3rpx;
+}
+
+/* 解析面板：全部收在题目最下方 */
+.explain-panel {
+    margin-top: 4rpx;
+    padding-top: 20rpx;
+    border-top: 2rpx solid var(--line);
+}
+
+.explain-block {
+    margin-bottom: 22rpx;
+}
+
+.explain-block:last-child {
+    margin-bottom: 0;
+}
+
+.explain-title {
+    display: block;
+    margin-bottom: 8rpx;
+    padding-left: 12rpx;
+    border-left: 6rpx solid var(--ink);
+    color: var(--ink);
+    font-size: 23rpx;
+    font-weight: 600;
+    letter-spacing: 1rpx;
+    line-height: 1.3;
+}
+
+.explain-text {
+    display: block;
+    color: var(--ink-2);
+    font-size: var(--fs-n);
+    line-height: 1.9;
+    text-align: justify;
+}
+
+.analysis-item {
+    display: flex;
+    padding: 12rpx 0;
+    align-items: flex-start;
+    border-bottom: 2rpx dashed var(--line);
+}
+
+.analysis-item:last-child {
+    border-bottom: 0;
+}
+
+.analysis-key {
+    display: flex;
+    width: 36rpx;
+    height: 36rpx;
+    margin-right: 12rpx;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 2rpx solid var(--line-2);
+    border-radius: 2rpx;
+    color: var(--ink-3);
+    font-size: 20rpx;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.analysis-key-ok {
+    border-color: var(--ok);
+    color: var(--ok);
+}
+
+.analysis-copy {
+    flex: 1;
+    min-width: 0;
+}
+
+.analysis-label {
+    display: block;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 17rpx;
+    letter-spacing: 1rpx;
+}
+
+.label-ok {
+    color: var(--ok);
+}
+
+.analysis-text {
+    display: block;
+    margin-top: 2rpx;
+    color: var(--ink-2);
+    font-size: var(--fs-n);
+    line-height: 1.8;
+}
+
+/* 隐藏底栏时的完成入口 */
+.no-nav {
+    padding-bottom: 90rpx;
+}
+
+.finish-float {
+    position: fixed;
+    right: 30rpx;
+    bottom: calc(40rpx + env(safe-area-inset-bottom));
+    display: flex;
+    height: 84rpx;
+    padding: 0 36rpx;
+    align-items: center;
+    justify-content: center;
+    border: 2rpx solid var(--accent);
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: var(--font-sans);
+    font-size: 24rpx;
+    letter-spacing: 2rpx;
+}
+
+/* 做题 / 背题 切换 */
+.mode-switch {
+    display: flex;
+    margin-left: 12rpx;
+    flex-shrink: 0;
+    border: 2rpx solid var(--line-2);
+}
+
+.mode-item {
+    display: flex;
+    height: 56rpx;
+    padding: 0 12rpx;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 20rpx;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.mode-item-on {
+    background: var(--accent);
+    color: var(--accent-ink);
+}
+
+.recite-tip {
+    margin-top: 14rpx;
+    padding: 8rpx 14rpx;
+    border-left: 6rpx solid var(--accent);
+    background: var(--surface-2);
+    color: var(--ink-2);
+    font-family: var(--font-sans);
+    font-size: 19rpx;
+}

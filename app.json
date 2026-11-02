@@ -1,0 +1,39 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/catalog/catalog",
+    "pages/data/data",
+    "pages/chapters/chapters",
+    "pages/practice/practice"
+  ],
+  "window": {
+    "navigationBarTitleText": "思政练习生",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#ffffff",
+    "backgroundTextStyle": "light"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "tabBar": {
+    "color": "#6b6b66",
+    "selectedColor": "#0b5394",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "刷题"
+      },
+      {
+        "pagePath": "pages/catalog/catalog",
+        "text": "题库"
+      },
+      {
+        "pagePath": "pages/data/data",
+        "text": "我的"
+      }
+    ]
+  }
+}

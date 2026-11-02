@@ -1,0 +1,108 @@
+<view class="page safe-bottom {{appearanceClass}}" style="{{rootStyle}}">
+    <view class="subject-tabs">
+        <view
+            wx:for="{{subjects}}"
+            wx:key="id"
+            class="subject-tab {{subjectId === item.id ? 'subject-tab-active' : ''}}"
+            data-id="{{item.id}}"
+            bindtap="switchSubject"
+        >
+            <text class="subject-tab-name">{{item.short}}</text>
+            <text class="subject-tab-total">{{item.total}}</text>
+        </view>
+    </view>
+
+    <view class="hero">
+        <text class="eyebrow">{{subjectEyebrow}}</text>
+        <text class="title">{{subjectTitle}}</text>
+        <text class="subtitle">{{subjectName}}</text>
+        <view class="hero-stats">
+            <view class="hero-stat">
+                <text class="hero-stat-value">{{total}}</text>
+                <text class="hero-stat-label">道题</text>
+            </view>
+            <view class="hero-stat">
+                <text class="hero-stat-value">{{chapterCount}}</text>
+                <text class="hero-stat-label">个章节</text>
+            </view>
+            <view class="hero-stat" wx:if="{{annotated > 0}}">
+                <text class="hero-stat-value">{{annotated}}</text>
+                <text class="hero-stat-label">题含解析</text>
+            </view>
+        </view>
+    </view>
+
+    <view class="stats-card card">
+        <view class="stat-item">
+            <text class="stat-value">{{practiced}}</text>
+            <text class="stat-label">已练题目</text>
+        </view>
+        <view class="stat-item">
+            <text class="stat-value">{{accuracy}}%</text>
+            <text class="stat-label">累计正确率</text>
+        </view>
+        <view class="stat-item">
+            <text class="stat-value">{{wrongCount}}</text>
+            <text class="stat-label">当前错题</text>
+        </view>
+        <view class="stat-item">
+            <text class="stat-value">{{favoriteCount}}</text>
+            <text class="stat-label">收藏题目</text>
+        </view>
+        <view class="progress-row">
+            <view class="progress-copy">
+                <text>本学科练习进度</text>
+                <text>{{progress}}%</text>
+            </view>
+            <view class="progress-track"><view class="progress-value" style="width: {{progress}}%;"></view></view>
+        </view>
+    </view>
+
+    <view class="resume-card" wx:if="{{resumeSession}}" bindtap="continuePractice">
+        <view class="resume-icon">续</view>
+        <view class="resume-copy">
+            <text class="resume-title">继续上次练习</text>
+            <text class="resume-description">{{resumeSession.title}} · 第 {{resumeSession.current}} / {{resumeSession.total}} 题</text>
+        </view>
+        <text class="resume-arrow">›</text>
+    </view>
+
+    <view class="section-heading">
+        <text class="section-title">开始练习</text>
+        <text class="section-note">答题后可查看解析</text>
+    </view>
+    <view class="practice-grid">
+        <view class="practice-item card" data-mode="sequence" bindtap="startMode" hover-class="tap-hover">
+            <view class="practice-icon icon-blue">序</view>
+            <text class="practice-title">顺序练习</text>
+            <text class="practice-description">按题库顺序逐题作答</text>
+        </view>
+        <view class="practice-item card" data-mode="random" bindtap="startMode" hover-class="tap-hover">
+            <view class="practice-icon icon-green">随</view>
+            <text class="practice-title">随机练习</text>
+            <text class="practice-description">打乱顺序查漏补缺</text>
+        </view>
+        <view class="practice-item card" data-mode="single" bindtap="startMode" hover-class="tap-hover">
+            <view class="practice-icon">单</view>
+            <text class="practice-title">单选专练</text>
+            <text class="practice-description">只做单选题 · {{singleCount}} 题</text>
+        </view>
+        <view class="practice-item card {{multipleCount === 0 ? 'practice-item-off' : ''}}" data-mode="multiple" bindtap="startMode" hover-class="tap-hover">
+            <view class="practice-icon">多</view>
+            <text class="practice-title">多选专练</text>
+            <text class="practice-description">{{multipleCount > 0 ? '只做多选题 · ' + multipleCount + ' 题' : '本科目暂无多选题'}}</text>
+        </view>
+        <view class="practice-item card" data-mode="chapter" bindtap="startMode" hover-class="tap-hover">
+            <view class="practice-icon icon-orange">章</view>
+            <text class="practice-title">章节练习</text>
+            <text class="practice-description">按知识章节专项突破</text>
+        </view>
+        <view class="practice-item card" data-mode="wrong" bindtap="startMode" hover-class="tap-hover">
+            <view class="practice-icon icon-red">错</view>
+            <text class="practice-title">错题重练</text>
+            <text class="practice-description">答对后自动移出错题本</text>
+        </view>
+    </view>
+
+    <view class="footer-note">马原 · 毛中特 · 新思想 · 共 1097 题 · 记录只存本机</view>
+</view>

@@ -1,0 +1,421 @@
+/* ============================================================
+   思政练习生 · 视觉基础层
+   暖纸底 + 墨色正文 + 期刊蓝主色 + 语义色（绿/红/琥珀）
+   方角、细线、无阴影；字体与字号可由用户切换
+   ============================================================ */
+
+page {
+    min-height: 100%;
+    background: #ffffff;
+    color: #1f1e1a;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", sans-serif;
+    font-size: 28rpx;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+}
+
+view,
+text,
+button,
+input,
+scroll-view {
+    box-sizing: border-box;
+}
+
+/* ---------- 设计令牌 ---------- */
+
+.page {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --surface-2: #f5f5f2;
+    --surface-3: #ecece7;
+    --line: #e2dfd6;
+    --line-2: #cbc8bd;
+    --ink: #1f1e1a;
+    --ink-2: #56544d;
+    --ink-3: #6f6d62;
+    --accent: #0b5394;
+    --accent-ink: #ffffff;
+    --accent-soft: #eaf1f8;
+    --accent-line: #b9cfe3;
+    --accent-edge: #0b5394;
+    --ok: #2c7a57;
+    --ok-soft: #eaf4ee;
+    --ok-line: #c8e0d3;
+    --ok-edge: #5e9b7c;
+    --bad: #b0463a;
+    --bad-soft: #fbedea;
+    --bad-line: #ebcbc5;
+    --bad-edge: #c4796d;
+    --warn: #9a6b12;
+    --warn-soft: #fbf2df;
+    --warn-line: #e8d5ae;
+    --mark: #8a5f0e;
+    --fs-q: 31rpx;
+    --fs-o: 27rpx;
+    --fs-n: 25rpx;
+    --font-serif: "Songti SC", "STSong", "Source Han Serif SC", "Noto Serif CJK SC", "Noto Serif SC", "SimSun", Georgia, "Times New Roman", serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--ink);
+}
+
+/* ---------- 米灰 ---------- */
+
+.theme-warm {
+    --bg: #f1e6cd;
+    --surface: #fffdf5;
+    --surface-2: #e9ddbf;
+    --surface-3: #ded0ad;
+    --line: #dbcbaa;
+    --line-2: #c2ae83;
+    --ink: #2b2519;
+    --ink-2: #554c39;
+    --ink-3: #665c45;
+    --accent: #1a4f7d;
+    --accent-soft: #dde5ee;
+    --accent-line: #a6bdd2;
+    --ok-soft: #eaf2ec;
+    --ok-line: #c4dacb;
+    --bad-soft: #f8ece9;
+    --bad-line: #e4c8c2;
+    --warn-soft: #f8efdd;
+    --warn-line: #e2cfae;
+    --accent-edge: #1a4f7d;
+}
+
+/* ---------- 牛皮纸 ---------- */
+
+.theme-kraft {
+    --bg: #e8dbbc;
+    --surface: #f7efdb;
+    --surface-2: #e0d1ab;
+    --surface-3: #d6c49b;
+    --line: #d5c39c;
+    --line-2: #b9a377;
+    --ink: #2b2418;
+    --ink-2: #52472f;
+    --ink-3: #655636;
+    --accent: #17496f;
+    --accent-ink: #ffffff;
+    --accent-soft: #d9e2ea;
+    --accent-line: #9db2c5;
+    --accent-edge: #17496f;
+    --ok: #2c6b3f;
+    --ok-soft: #e2e8d0;
+    --ok-line: #c3cfa8;
+    --ok-edge: #4e7d5c;
+    --bad: #a8412f;
+    --bad-soft: #f5ded5;
+    --bad-line: #e0bfb3;
+    --bad-edge: #b96a56;
+    --warn: #7d5410;
+    --warn-soft: #f6ecce;
+    --warn-line: #e0cb9c;
+    --mark: #7d5410;
+}
+
+/* ---------- 护眼绿 ---------- */
+
+.theme-green {
+    --bg: #e9f1e5;
+    --surface: #fbfdf9;
+    --surface-2: #dfeadd;
+    --surface-3: #d4e0cf;
+    --line: #d2e0cd;
+    --line-2: #b2c6ac;
+    --ink: #1f2a1c;
+    --ink-2: #46523e;
+    --ink-3: #5c6852;
+    --accent: #145a60;
+    --accent-ink: #ffffff;
+    --accent-soft: #d7e7e7;
+    --accent-line: #9dbfbd;
+    --accent-edge: #145a60;
+    --ok: #1f6b45;
+    --ok-soft: #cfe6d6;
+    --ok-line: #a9cdb6;
+    --ok-edge: #43835f;
+    --bad: #a8412f;
+    --bad-soft: #f7e2dd;
+    --bad-line: #e2c0b8;
+    --bad-edge: #bb6d5a;
+    --warn: #8a5f0e;
+    --warn-soft: #f7ecc9;
+    --warn-line: #e2cd9e;
+    --mark: #8a5f0e;
+}
+
+/* ---------- 夜间 ---------- */
+
+.theme-night {
+    --bg: #121212;
+    --surface: #171717;
+    --surface-2: #1e1e1e;
+    --surface-3: #272727;
+    --line: #343431;
+    --line-2: #494944;
+    --ink: #eaeae6;
+    --ink-2: #c2c2bb;
+    --ink-3: #98988f;
+    --accent: #7fb2e5;
+    --accent-ink: #0b1a26;
+    --accent-soft: #1a2632;
+    --accent-line: #33506b;
+    --accent-edge: #4b7cab;
+    --ok: #7fc49a;
+    --ok-soft: #18251d;
+    --ok-line: #2f4d3a;
+    --ok-edge: #4e8763;
+    --bad: #e59a90;
+    --bad-soft: #2b1d1b;
+    --bad-line: #533430;
+    --bad-edge: #8c5a52;
+    --warn: #dcb271;
+    --warn-soft: #2b2419;
+    --warn-line: #4f4229;
+    --mark: #dcb271;
+}
+
+/* ---------- 字体切换 ---------- */
+
+.font-hei {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", sans-serif;
+}
+
+.font-song {
+    font-family: "Songti SC", "STSong", "Source Han Serif SC", "Noto Serif CJK SC", "Noto Serif SC", "SimSun", Georgia, "Times New Roman", serif;
+}
+
+.font-kai {
+    font-family: "Kaiti SC", "STKaiti", "KaiTi", "Noto Serif CJK SC", "SimSun", serif;
+}
+
+/* ---------- 基础组件 ---------- */
+
+.card {
+    border: 2rpx solid var(--line);
+    border-radius: 8rpx;
+    background: var(--surface);
+}
+
+button {
+    margin: 0;
+    padding: 0;
+    border-radius: 4rpx;
+    background: transparent;
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 27rpx;
+    line-height: 1.4;
+}
+
+button::after {
+    border: 0;
+}
+
+.primary-button {
+    display: flex;
+    height: 88rpx;
+    padding: 0 30rpx;
+    align-items: center;
+    justify-content: center;
+    border: 2rpx solid var(--accent);
+    border-radius: 4rpx;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-size: 27rpx;
+    font-weight: 500;
+    letter-spacing: 2rpx;
+}
+
+.primary-button[disabled] {
+    border-color: var(--line);
+    background: var(--surface-3);
+    color: var(--ink-3);
+}
+
+.secondary-button {
+    display: flex;
+    height: 88rpx;
+    padding: 0 30rpx;
+    align-items: center;
+    justify-content: center;
+    border: 2rpx solid var(--ink);
+    border-radius: 4rpx;
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 27rpx;
+    letter-spacing: 1rpx;
+}
+
+.ghost-button {
+    display: flex;
+    height: 84rpx;
+    padding: 0 28rpx;
+    align-items: center;
+    justify-content: center;
+    border: 2rpx solid var(--line-2);
+    border-radius: 4rpx;
+    background: var(--surface);
+    color: var(--ink-2);
+    font-size: 26rpx;
+}
+
+.muted {
+    color: var(--ink-3);
+}
+
+.safe-bottom {
+    padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
+}
+
+.tap-hover {
+    opacity: 0.65;
+}
+
+/* 进度条：细，方角，墨色 */
+.progress-track {
+    height: 6rpx;
+    overflow: hidden;
+    background: var(--surface-3);
+}
+
+.progress-value {
+    height: 100%;
+    background: var(--accent);
+}
+
+/* 学科切换：目录式下划线标签 */
+.subject-tabs {
+    display: flex;
+    margin-bottom: 26rpx;
+    border-bottom: 2rpx solid var(--line);
+}
+
+.subject-tab {
+    display: flex;
+    flex: 1;
+    padding: 12rpx 0 14rpx;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.subject-tab-active {
+    margin-bottom: -2rpx;
+    border-bottom: 6rpx solid var(--ink);
+}
+
+.subject-tab-name {
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 26rpx;
+    font-weight: 400;
+}
+
+.subject-tab-total {
+    margin-top: 2rpx;
+    color: var(--ink-3);
+    font-size: 19rpx;
+    opacity: 0.8;
+}
+
+.subject-tab-active .subject-tab-name {
+    color: var(--ink);
+    font-weight: 600;
+}
+
+/* 小节标题：booktabs 式双线 */
+.section-heading {
+    display: flex;
+    margin: 38rpx 0 16rpx;
+    padding-bottom: 10rpx;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 2rpx solid var(--line-2);
+}
+
+.section-title {
+    padding-left: 12rpx;
+    border-left: 8rpx solid var(--accent);
+    line-height: 1.2;
+}
+
+.section-title {
+    color: var(--ink);
+    font-size: 29rpx;
+    font-weight: 600;
+    letter-spacing: 1rpx;
+}
+
+.section-note {
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 19rpx;
+}
+
+/* 小标题：左墨线 */
+.block-h {
+    display: flex;
+    margin: 26rpx 0 10rpx;
+    padding-left: 12rpx;
+    align-items: center;
+    border-left: 6rpx solid var(--ink);
+    color: var(--ink);
+    font-size: 24rpx;
+    font-weight: 600;
+    letter-spacing: 1rpx;
+}
+
+/* 题型标签：细方框，不用胶囊 */
+.type-tag {
+    padding: 0 10rpx;
+    border: 2rpx solid var(--accent-line);
+    border-radius: 2rpx;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-family: var(--font-sans);
+    font-size: 18rpx;
+    line-height: 1.7;
+}
+
+/* 编号小方块 */
+.sec-chip {
+    display: flex;
+    min-width: 40rpx;
+    height: 40rpx;
+    padding: 0 8rpx;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2rpx;
+    background: var(--ink);
+    color: var(--bg);
+    font-family: var(--font-sans);
+    font-size: 19rpx;
+    font-weight: 600;
+}
+
+/* 定理框：左墨线 + 浅底，用于记忆小注、解题思路 */
+.theorem {
+    padding: 16rpx 18rpx;
+    border-left: 6rpx solid var(--ink);
+    background: var(--surface-2);
+}
+
+.theorem-accent {
+    border-left-color: var(--accent);
+}
+
+/* 页脚说明 */
+.page-note {
+    display: block;
+    padding: 34rpx 8rpx 0;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 19rpx;
+    line-height: 1.8;
+    text-align: center;
+}

@@ -1,0 +1,118 @@
+<view class="page safe-bottom {{appearanceClass}} {{hideNav ? 'no-nav' : ''}}" style="{{rootStyle}}" bindtouchstart="onTouchStart" bindtouchend="onTouchEnd">
+    <view class="state-view" wx:if="{{loading}}">
+        <text class="state-title">正在载入题目…</text>
+    </view>
+
+    <view class="state-view" wx:elif="{{empty}}">
+        <view class="state-icon">题</view>
+        <text class="state-title">暂时没有可练习的题目</text>
+        <text class="state-description">错题和收藏会在你答题后出现在这里</text>
+        <button class="primary-button state-button" bindtap="goHome">返回首页</button>
+    </view>
+
+    <view class="finish-view" wx:elif="{{finished}}">
+        <view class="finish-badge">完成</view>
+        <text class="finish-title">本轮练习完成</text>
+        <text class="finish-subtitle">{{title}}</text>
+        <view class="finish-stats card">
+            <view class="finish-stat"><text class="finish-value correct-text">{{sessionCorrect}}</text><text class="finish-label">答对</text></view>
+            <view class="finish-stat"><text class="finish-value wrong-text">{{sessionWrong}}</text><text class="finish-label">答错</text></view>
+            <view class="finish-stat"><text class="finish-value">{{sessionUnanswered}}</text><text class="finish-label">未作答</text></view>
+        </view>
+        <button class="primary-button finish-button" bindtap="restart">再练一次</button>
+        <button class="ghost-button finish-button" bindtap="goHome">返回首页</button>
+    </view>
+
+    <block wx:else>
+        <view class="practice-header">
+            <view class="practice-heading">
+                <text class="practice-title">{{title}}</text>
+                <text class="practice-progress-copy">已答 {{answeredCount}} / {{total}}</text>
+            </view>
+            <view class="mode-switch">
+                <view class="mode-item {{recite ? '' : 'mode-item-on'}}" data-mode="quiz" bindtap="switchMode" hover-class="tap-hover">做题</view>
+                <view class="mode-item {{recite ? 'mode-item-on' : ''}}" data-mode="recite" bindtap="switchMode" hover-class="tap-hover">背题</view>
+            </view>
+            <view class="practice-actions">
+                <view class="catalog-button" bindtap="openCatalog" hover-class="tap-hover">目录</view>
+                <view class="favorite-button {{favorite ? 'favorite-active' : ''}}" bindtap="toggleFavorite" hover-class="tap-hover">
+                    <text class="favorite-star">{{favorite ? '★' : '☆'}}</text>
+                </view>
+                <view class="slash-button {{slashed ? 'slash-active' : ''}}" bindtap="slashQuestion" hover-class="tap-hover">斩</view>
+            </view>
+        </view>
+        <view class="progress-track"><view class="progress-value" style="width: {{progress}}%;"></view></view>
+
+        <view class="question-card card">
+            <view class="question-meta">
+                <view class="question-number">{{currentIndex + 1}}</view>
+                <text class="question-total">/ {{total}}</text>
+                <view class="type-tag">{{current.typeText}}</view>
+            </view>
+            <text class="chapter-name">{{current.chapter}}</text>
+            <text class="question-text" style="font-size: {{questionFontSize}}rpx;">{{current.question}}</text>
+            <view class="multi-tip" wx:if="{{current.type === 'multiple' && !submitted && !recite}}">本题有多个正确答案，选完后请确认</view>
+            <view class="recite-tip" wx:if="{{recite}}">背题模式 · 答案与解析已展开，不记录作答</view>
+
+            <view class="options-list">
+                <view class="option {{item.stateClass}}" wx:for="{{viewOptions}}" wx:key="key" data-key="{{item.key}}" bindtap="selectOption" hover-class="tap-hover">
+                    <view class="option-marker">{{item.marker}}</view>
+                    <view class="option-body">
+                        <text class="option-text" style="font-size: {{optionFontSize}}rpx;">{{item.text}}</text>
+                    </view>
+                </view>
+            </view>
+
+            <button wx:if="{{current.type === 'multiple' && !submitted && !reviewMode && !recite}}" class="primary-button confirm-button" bindtap="submitMultiple">确认答案</button>
+
+            <view class="feedback {{correct ? 'feedback-correct' : 'feedback-wrong'}}" wx:if="{{submitted}}">
+                <view class="feedback-heading">
+                    <view class="feedback-icon">{{correct ? '✓' : '!'}}</view>
+                    <text class="feedback-title">{{feedbackTitle}}</text>
+                </view>
+                <view class="answer-row">
+                    <text class="answer-label">正确答案</text>
+                    <text class="answer-value correct-text">{{correctText}}</text>
+                </view>
+                <view class="answer-row" wx:if="{{!correct}}">
+                    <text class="answer-label">你的答案</text>
+                    <text class="answer-value wrong-text">{{userAnswerText}}</text>
+                </view>
+            </view>
+
+            <button wx:if="{{submitted || recite}}" class="explain-toggle" bindtap="toggleExplanation" hover-class="tap-hover">
+                {{showExplanation ? '隐藏解析' : '查看解析'}}
+            </button>
+
+            <view class="explain-panel" wx:if="{{(submitted || recite) && showExplanation}}">
+                <view class="explain-block" wx:if="{{current.solution}}">
+                    <text class="explain-title">解题思路</text>
+                    <text class="explain-text" style="font-size: {{analysisFontSize}}rpx;">{{current.solution}}</text>
+                </view>
+                <view class="explain-block">
+                    <text class="explain-title">逐项解析</text>
+                    <view class="analysis-item" wx:for="{{viewOptions}}" wx:key="key">
+                        <text class="analysis-key {{item.analysisLabel === '入选依据' ? 'analysis-key-ok' : ''}}">{{item.key}}</text>
+                        <view class="analysis-copy">
+                            <text class="analysis-label {{item.analysisLabel === '入选依据' ? 'label-ok' : ''}}">{{item.analysisLabel}}</text>
+                            <text class="analysis-text" style="font-size: {{analysisFontSize}}rpx;">{{item.analysis}}</text>
+                        </view>
+                    </view>
+                </view>
+                <view class="memory-tip" wx:if="{{current.memoryTip}}">
+                    <view class="memory-tip-heading">
+                        <text class="memory-tip-title">记忆小注</text>
+                    </view>
+                    <text class="memory-tip-text" style="font-size: {{analysisFontSize}}rpx;">{{current.memoryTip}}</text>
+                </view>
+            </view>
+        </view>
+
+        <view class="bottom-bar" wx:if="{{!hideNav}}">
+            <button class="nav-button nav-secondary" hover-class="nav-pressed" disabled="{{!canPrev}}" bindtap="goPrevious">上一题</button>
+            <view class="bottom-position">{{currentIndex + 1}} / {{total}}</view>
+            <button class="nav-button nav-secondary" hover-class="nav-pressed" bindtap="goNext">{{isLast ? (reviewMode ? '返回答卷' : '完成练习') : '下一题'}}</button>
+        </view>
+        <view class="finish-float" wx:if="{{hideNav && isLast}}" bindtap="goNext" hover-class="tap-hover">{{reviewMode ? '返回答卷' : '完成练习'}}</view>
+    </block>
+</view>

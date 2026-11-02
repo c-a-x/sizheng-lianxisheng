@@ -1,0 +1,159 @@
+<view class="page safe-bottom {{appearanceClass}}" style="{{rootStyle}}">
+    <view class="page-header">
+        <text class="page-eyebrow">本机档案与偏好</text>
+        <text class="page-title">我的</text>
+        <text class="page-subtitle">外观、备份与清理，都在这里</text>
+    </view>
+
+    <view class="notice-card">
+        <view class="notice-mark">本</view>
+        <view class="notice-copy">
+            <text class="notice-title">数据只保存在当前设备</text>
+            <text class="notice-text">不上传服务器。删除小程序、清理微信缓存或更换手机后，未备份的记录会丢失。</text>
+        </view>
+    </view>
+
+    <view class="setting-card card">
+        <text class="setting-title">外观</text>
+        <view class="chip-row">
+            <view
+                wx:for="{{themes}}"
+                wx:key="id"
+                class="chip {{themeId === item.id ? 'chip-active' : ''}}"
+                data-id="{{item.id}}"
+                bindtap="chooseTheme"
+                hover-class="chip-hover"
+            >
+                <text class="chip-name">{{item.name}}</text>
+            </view>
+        </view>
+        <text class="setting-hint">{{themeHint}}</text>
+        <text class="setting-title setting-title-gap">字号</text>
+        <view class="chip-row">
+            <view
+                wx:for="{{sizes}}"
+                wx:key="id"
+                class="chip {{sizeId === item.id ? 'chip-active' : ''}}"
+                data-id="{{item.id}}"
+                bindtap="chooseSize"
+                hover-class="chip-hover"
+            >
+                <text class="chip-name">{{item.name}}</text>
+            </view>
+        </view>
+
+        <text class="setting-title setting-title-gap">字体</text>
+        <view class="chip-row">
+            <view
+                wx:for="{{fonts}}"
+                wx:key="id"
+                class="chip {{fontId === item.id ? 'chip-active' : ''}}"
+                data-id="{{item.id}}"
+                bindtap="chooseFont"
+                hover-class="chip-hover"
+            >
+                <text class="chip-name">{{item.name}}</text>
+            </view>
+        </view>
+        <text class="setting-hint">{{fontHint}}</text>
+
+        <view class="preview-card">
+            <text class="preview-label">效果预览</text>
+            <text class="question-text" style="font-size: {{previewQuestionSize}}rpx;">马克思主义中国化时代化的最新理论成果是（ ）。</text>
+            <text class="option-text" style="font-size: {{previewOptionSize}}rpx;">A 毛泽东思想　B 邓小平理论　C 习近平新时代中国特色社会主义思想</text>
+        </view>
+    </view>
+
+    <view class="setting-card card">
+        <text class="setting-title">练习</text>
+        <view class="switch-row">
+            <view class="switch-copy">
+                <text class="switch-title">答对自动跳转</text>
+                <text class="switch-hint">单选题答对后约 0.8 秒进入下一题</text>
+            </view>
+            <switch checked="{{autoNext}}" color="{{accentColor}}" bindchange="toggleAutoNext" />
+        </view>
+        <view class="switch-row">
+            <view class="switch-copy">
+                <text class="switch-title">隐藏上一题 / 下一题</text>
+                <text class="switch-hint">关闭后可用左右滑动或题目目录切换</text>
+            </view>
+            <switch checked="{{hideNav}}" color="{{accentColor}}" bindchange="toggleHideNav" />
+        </view>
+    </view>
+
+    <view class="summary-card card">
+        <view class="summary-grid">
+            <view class="summary-item">
+                <text class="summary-value">{{summary.practiced}}</text>
+                <text class="summary-label">已练题目</text>
+            </view>
+            <view class="summary-item">
+                <text class="summary-value">{{summary.wrong}}</text>
+                <text class="summary-label">当前错题</text>
+            </view>
+            <view class="summary-item">
+                <text class="summary-value">{{summary.favorites}}</text>
+                <text class="summary-label">收藏题目</text>
+            </view>
+            <view class="summary-item">
+                <text class="summary-value">{{summary.resumeSessions}}</text>
+                <text class="summary-label">练习断点</text>
+            </view>
+        </view>
+        <view class="summary-footer">
+            <text>题库共 {{summary.totalQuestions}} 题 · 本机练习记录 {{summary.sessions}} 组</text>
+            <view class="summary-flags">
+            </view>
+        </view>
+    </view>
+
+    <view class="section-heading">
+        <text class="section-title">备份与恢复</text>
+        <text class="section-note">JSON 学习档案</text>
+    </view>
+
+    <view class="action-card card">
+        <view class="action-block">
+            <text class="action-title">导出学习档案</text>
+            <text class="action-description">包含答题记录、错题、收藏和练习断点。生成后通过微信聊天发送。</text>
+            <button class="primary-button action-button" disabled="{{busy}}" bindtap="exportBackup">导出学习档案</button>
+        </view>
+
+        <view class="action-divider"></view>
+
+        <view class="action-block">
+            <text class="action-title">从聊天文件恢复</text>
+            <text class="action-description">选择之前导出的 .json 文件。恢复会覆盖当前学习记录，系统会先保留一份可撤销的回滚点。</text>
+            <button class="ghost-button action-button" disabled="{{busy}}" bindtap="chooseRestoreFile">{{busy ? '正在读取…' : '选择备份文件'}}</button>
+            <text class="privacy-note">只读取你主动选择的文件，在本机解析，不上传服务器。</text>
+        </view>
+
+        <view class="rollback-box" wx:if="{{hasRollback}}">
+            <view class="rollback-copy">
+                <text class="rollback-title">有一次恢复可撤销</text>
+                <text class="rollback-text">{{rollbackText}}</text>
+            </view>
+            <view class="rollback-action" bindtap="undoRestore">撤销恢复</view>
+        </view>
+    </view>
+
+    <view class="record-card card">
+        <view class="record-row">
+            <text class="record-label">上次导出</text>
+            <text class="record-value">{{lastExportText}}</text>
+        </view>
+        <view class="record-row">
+            <text class="record-label">上次恢复</text>
+            <text class="record-value">{{lastRestoreText}}</text>
+        </view>
+    </view>
+
+    <view class="danger-card card">
+        <text class="danger-title">清除本机记录</text>
+        <text class="danger-description">删除全部答题记录、错题、收藏和练习断点。已经发送到微信的备份文件不受影响。</text>
+        <button class="danger-button" disabled="{{busy}}" bindtap="clearLearningData">清除全部学习记录</button>
+    </view>
+
+    <view class="page-note">恢复旧备份不会改变题库、答案或解析；不同题库版本之间可能丢失无法识别的记录。</view>
+</view>

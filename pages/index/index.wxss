@@ -1,0 +1,246 @@
+/* 首页 · 刷题（期刊刊头 + 书版表） */
+
+.page {
+    min-height: 100vh;
+    padding: 30rpx 30rpx 44rpx;
+}
+
+/* 刊头 */
+.hero {
+    padding-top: 18rpx;
+    border-top: 8rpx solid var(--accent);
+}
+
+.eyebrow {
+    display: block;
+    color: var(--accent);
+    font-family: var(--font-sans);
+    font-size: 19rpx;
+    letter-spacing: 3rpx;
+}
+
+.title {
+    display: block;
+    margin-top: 10rpx;
+    color: var(--ink);
+    font-size: 50rpx;
+    font-weight: 700;
+    letter-spacing: 0.5rpx;
+    line-height: 1.3;
+}
+
+.subtitle {
+    display: block;
+    margin-top: 8rpx;
+    color: var(--ink-2);
+    font-size: 23rpx;
+    line-height: 1.7;
+}
+
+.hero-stats {
+    display: flex;
+    margin-top: 20rpx;
+    padding-top: 14rpx;
+    border-top: 2rpx solid var(--line);
+}
+
+.hero-stat {
+    display: flex;
+    margin-right: 40rpx;
+    align-items: baseline;
+}
+
+.hero-stat-value {
+    color: var(--ink);
+    font-size: 34rpx;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.hero-stat-label {
+    margin-left: 6rpx;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 19rpx;
+}
+
+/* 统计：书版三线表 */
+.stats-card {
+    display: flex;
+    margin-top: 26rpx;
+    padding: 20rpx 0 16rpx;
+    flex-wrap: wrap;
+    border: 0;
+    border-top: 2rpx solid var(--line-2);
+    border-bottom: 2rpx solid var(--line-2);
+    border-radius: 0;
+    background: transparent;
+}
+
+.stat-item {
+    display: flex;
+    width: 25%;
+    align-items: center;
+    flex-direction: column;
+}
+
+.stat-value {
+    color: var(--ink);
+    font-size: 36rpx;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.stat-label {
+    margin-top: 4rpx;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 18rpx;
+}
+
+.progress-row {
+    width: 100%;
+    margin: 20rpx 0 0;
+    padding-top: 16rpx;
+    border-top: 2rpx solid var(--line);
+}
+
+.progress-copy {
+    display: flex;
+    margin-bottom: 10rpx;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 19rpx;
+}
+
+/* 续练：定理框 */
+.resume-card {
+    display: flex;
+    margin-top: 24rpx;
+    padding: 20rpx 20rpx;
+    align-items: center;
+    border: 0;
+    border-left: 8rpx solid var(--accent);
+    border-radius: 0;
+    background: var(--surface-2);
+}
+
+.resume-icon {
+    display: flex;
+    width: 44rpx;
+    height: 44rpx;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--accent);
+    font-size: 26rpx;
+    font-weight: 700;
+}
+
+.resume-copy {
+    display: flex;
+    margin-left: 12rpx;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.resume-title {
+    color: var(--ink);
+    font-size: 25rpx;
+    font-weight: 600;
+}
+
+.resume-description {
+    margin-top: 2rpx;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 19rpx;
+}
+
+.resume-arrow {
+    color: var(--ink-3);
+    font-size: 28rpx;
+    line-height: 1;
+}
+
+/* 练习入口：四格表 */
+.practice-grid {
+    display: flex;
+    flex-wrap: wrap;
+    border-top: 2rpx solid var(--line-2);
+}
+
+.practice-item {
+    display: flex;
+    width: 50%;
+    margin: 0;
+    padding: 22rpx 20rpx 24rpx;
+    flex-direction: column;
+    border: 0;
+    border-bottom: 2rpx solid var(--line);
+    border-radius: 0;
+    background: transparent;
+}
+
+.practice-item:nth-child(odd) {
+    border-right: 2rpx solid var(--line);
+}
+
+.practice-icon {
+    display: flex;
+    width: 40rpx;
+    height: 40rpx;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink);
+    font-size: 30rpx;
+    font-weight: 700;
+}
+
+.icon-blue {
+    color: var(--accent);
+}
+
+.icon-green {
+    color: var(--ok);
+}
+
+.icon-orange {
+    color: var(--warn);
+}
+
+.icon-red {
+    color: var(--bad);
+}
+
+.practice-title {
+    margin-top: 8rpx;
+    color: var(--ink);
+    font-size: 27rpx;
+    font-weight: 600;
+}
+
+.practice-description {
+    margin-top: 2rpx;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 19rpx;
+    line-height: 1.6;
+}
+
+.footer-note {
+    padding: 22rpx 8rpx 0;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 18rpx;
+    line-height: 1.7;
+    text-align: center;
+}
+
+/* 题型专练：无可选题时弱化 */
+.practice-item-off {
+    opacity: 0.5;
+}

@@ -1,0 +1,588 @@
+/* 题库目录 · 目录页版式 */
+
+.page {
+    min-height: 100vh;
+    padding: 26rpx 30rpx 44rpx;
+}
+
+/* 页头 */
+.page-header {
+    display: flex;
+    padding: 4rpx 0 18rpx;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-bottom: 2rpx solid var(--ink);
+}
+
+.page-title {
+    display: block;
+    color: var(--ink);
+    font-size: 38rpx;
+    font-weight: 700;
+    letter-spacing: 0.5rpx;
+}
+
+.page-subtitle {
+    display: block;
+    margin-top: 2rpx;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 19rpx;
+}
+
+.result-summary {
+    display: flex;
+    align-items: baseline;
+}
+
+.result-number {
+    color: var(--accent);
+    font-size: 40rpx;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.result-unit {
+    margin-left: 4rpx;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 19rpx;
+}
+
+/* 练习上下文 */
+.session-context {
+    display: flex;
+    margin-top: 18rpx;
+    padding: 14rpx 16rpx;
+    align-items: center;
+    border-left: 6rpx solid var(--accent);
+    background: var(--surface-2);
+}
+
+.session-context-icon {
+    display: none;
+}
+
+.session-context-copy {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.session-context-title {
+    color: var(--ink);
+    font-size: 22rpx;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.session-context-text {
+    margin-top: 2rpx;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 18rpx;
+}
+
+/* 搜索 */
+.search-box {
+    display: flex;
+    height: 78rpx;
+    margin-top: 18rpx;
+    padding: 0 16rpx;
+    align-items: center;
+    border: 2rpx solid var(--line-2);
+    border-radius: 2rpx;
+    background: var(--surface);
+}
+
+.search-icon {
+    margin-right: 10rpx;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 28rpx;
+    line-height: 1;
+}
+
+.search-input {
+    flex: 1;
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 24rpx;
+}
+
+.search-placeholder {
+    color: var(--ink-3);
+}
+
+.search-clear {
+    display: flex;
+    width: 40rpx;
+    height: 40rpx;
+    align-items: center;
+    justify-content: center;
+    border: 2rpx solid var(--line-2);
+    border-radius: 2rpx;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 22rpx;
+}
+
+/* 筛选 */
+.filter-row {
+    display: flex;
+    margin-top: 14rpx;
+    flex-wrap: wrap;
+}
+
+.filter-item {
+    display: flex;
+    margin: 0 10rpx 10rpx 0;
+    padding: 8rpx 14rpx;
+    align-items: center;
+    border: 2rpx solid var(--line-2);
+    border-radius: 2rpx;
+    background: transparent;
+    color: var(--ink-2);
+    font-family: var(--font-sans);
+    font-size: 21rpx;
+}
+
+.filter-active {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--accent-ink);
+}
+
+.filter-count {
+    margin-left: 6rpx;
+    color: var(--ink-3);
+    font-size: 18rpx;
+}
+
+.filter-active .filter-count {
+    color: var(--bg);
+    opacity: 0.7;
+}
+
+/* 导出工具条 */
+.export-tools {
+    display: flex;
+    margin-top: 12rpx;
+    padding: 14rpx 16rpx;
+    align-items: center;
+    border-top: 2rpx solid var(--line);
+    border-bottom: 2rpx solid var(--line);
+    background: transparent;
+}
+
+.export-tools-copy {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.export-tools-title {
+    color: var(--ink);
+    font-size: 22rpx;
+    font-weight: 600;
+}
+
+.export-tools-note {
+    margin-top: 2rpx;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 18rpx;
+}
+
+.export-tool {
+    display: flex;
+    height: 50rpx;
+    margin-left: 10rpx;
+    padding: 0 14rpx;
+    align-items: center;
+    border: 2rpx solid var(--line-2);
+    border-radius: 2rpx;
+    background: transparent;
+    color: var(--ink-2);
+    font-family: var(--font-sans);
+    font-size: 19rpx;
+    white-space: nowrap;
+}
+
+.export-tool-active {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--accent-ink);
+}
+
+.export-tool-count {
+    margin-left: 6rpx;
+    color: var(--ink-3);
+    font-size: 17rpx;
+}
+
+/* 列表标题 */
+.list-caption {
+    display: flex;
+    margin: 26rpx 0 10rpx;
+    padding-bottom: 8rpx;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 2rpx solid var(--line-2);
+    color: var(--ink);
+    font-size: 24rpx;
+    font-weight: 600;
+    letter-spacing: 1rpx;
+}
+
+.caption-count {
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 18rpx;
+    font-weight: 400;
+}
+
+/* 空状态 */
+.empty-state {
+    display: flex;
+    padding: 100rpx 40rpx;
+    align-items: center;
+    flex-direction: column;
+}
+
+.empty-icon {
+    display: flex;
+    width: 76rpx;
+    height: 76rpx;
+    align-items: center;
+    justify-content: center;
+    border: 2rpx solid var(--line-2);
+    border-radius: 2rpx;
+    color: var(--ink-3);
+    font-size: 32rpx;
+}
+
+.empty-title {
+    margin-top: 22rpx;
+    color: var(--ink);
+    font-size: 27rpx;
+    font-weight: 600;
+}
+
+.empty-description {
+    margin-top: 8rpx;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 21rpx;
+    text-align: center;
+}
+
+.empty-button {
+    margin-top: 26rpx;
+    min-width: 280rpx;
+}
+
+/* 章节：书版三线表 */
+.chapter-card {
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+    border: 0;
+    border-bottom: 2rpx solid var(--line-2);
+    border-radius: 0;
+    background: transparent;
+}
+
+.chapter-header {
+    display: flex;
+    padding: 20rpx 0 12rpx;
+    align-items: center;
+}
+
+.chapter-heading {
+    flex: 1;
+    min-width: 0;
+}
+
+.chapter-title-row {
+    display: flex;
+    align-items: baseline;
+}
+
+.chapter-title {
+    color: var(--ink);
+    font-size: 26rpx;
+    font-weight: 600;
+    line-height: 1.45;
+}
+
+.match-tag {
+    margin-left: 10rpx;
+    color: var(--accent);
+    font-family: var(--font-sans);
+    font-size: 18rpx;
+}
+
+.chapter-meta {
+    display: flex;
+    margin-top: 2rpx;
+    align-items: center;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 18rpx;
+}
+
+.meta-separator {
+    margin: 0 8rpx;
+    color: var(--line-2);
+}
+
+.chapter-wrong-count {
+    color: var(--bad);
+}
+
+.chapter-toggle {
+    display: flex;
+    margin-left: 12rpx;
+    align-items: baseline;
+    flex-shrink: 0;
+}
+
+.chapter-percent {
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 19rpx;
+}
+
+.chapter-chevron {
+    margin-left: 8rpx;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 26rpx;
+    line-height: 1;
+}
+
+.chevron-open {
+    transform: rotate(90deg);
+}
+
+.chapter-progress-track {
+    height: 4rpx;
+    margin: 0 0 2rpx;
+    overflow: hidden;
+    background: var(--surface-3);
+}
+
+.chapter-progress-value {
+    height: 100%;
+    background: var(--accent);
+}
+
+/* 题目行 */
+.question-list {
+    padding: 0;
+}
+
+.question-row {
+    display: flex;
+    padding: 16rpx 0;
+    align-items: flex-start;
+    border-top: 2rpx solid var(--line);
+}
+
+.question-selected {
+    background: var(--surface-2);
+}
+
+.select-check {
+    display: flex;
+    width: 34rpx;
+    height: 34rpx;
+    margin: 6rpx 14rpx 0 0;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 2rpx solid var(--line-2);
+    border-radius: 2rpx;
+    background: var(--surface);
+}
+
+.select-check.checked {
+    border-color: var(--accent);
+    background: var(--accent);
+}
+
+.check-mark {
+    color: var(--accent-ink);
+    font-family: var(--font-sans);
+    font-size: 20rpx;
+    font-weight: 700;
+}
+
+.question-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.question-meta {
+    display: flex;
+    margin-bottom: 2rpx;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.question-id {
+    margin-right: 10rpx;
+    color: var(--accent);
+    font-family: var(--font-sans);
+    font-size: 17rpx;
+}
+
+.current-tag {
+    margin-left: 8rpx;
+    padding: 0 8rpx;
+    border: 2rpx solid var(--accent);
+    border-radius: 2rpx;
+    color: var(--accent);
+    font-family: var(--font-sans);
+    font-size: 17rpx;
+    line-height: 1.6;
+}
+
+.question-summary {
+    display: -webkit-box;
+    overflow: hidden;
+    color: var(--ink-2);
+    font-size: var(--fs-s, 23rpx);
+    line-height: 1.7;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.question-side {
+    display: flex;
+    margin-left: 12rpx;
+    align-items: center;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.status-tag {
+    padding: 0 8rpx;
+    border: 2rpx solid var(--line-2);
+    border-radius: 2rpx;
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 17rpx;
+    line-height: 1.7;
+    white-space: nowrap;
+}
+
+.status-slashed {
+    border-style: dashed;
+    border-color: var(--line-2);
+    color: var(--ink-3);
+}
+
+.status-done {
+    border-color: var(--ok-edge);
+    color: var(--ok);
+}
+
+.status-wrong {
+    border-color: var(--bad-edge);
+    color: var(--bad);
+}
+
+.status-undone {
+    border-color: var(--line);
+    color: var(--ink-3);
+}
+
+.favorite-mark {
+    margin-top: 4rpx;
+    color: var(--warn);
+    font-size: 20rpx;
+    line-height: 1;
+}
+
+.chapter-collapsed {
+    display: flex;
+    padding: 12rpx 0 16rpx;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 2rpx solid var(--line);
+    color: var(--ink-3);
+    font-family: var(--font-sans);
+    font-size: 19rpx;
+}
+
+.collapsed-arrow {
+    color: var(--ink-3);
+    font-size: 20rpx;
+}
+
+/* 多选导出条 */
+.selection-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    padding: 14rpx 30rpx calc(14rpx + env(safe-area-inset-bottom));
+    align-items: center;
+    border-top: 2rpx solid var(--ink);
+    background: var(--surface);
+}
+
+.selection-summary {
+    color: var(--ink-2);
+    font-family: var(--font-sans);
+    font-size: 21rpx;
+}
+
+.selection-number {
+    color: var(--ink);
+    font-size: 30rpx;
+    font-weight: 700;
+}
+
+.select-all-action {
+    margin-left: auto;
+    padding: 10rpx 16rpx;
+    color: var(--accent);
+    font-family: var(--font-sans);
+    font-size: 21rpx;
+}
+
+.export-selected {
+    height: 72rpx;
+    margin-left: 12rpx;
+    padding: 0 22rpx;
+    font-size: 23rpx;
+}
+
+.selection-page {
+    padding-bottom: calc(180rpx + env(safe-area-inset-bottom));
+}
+
+/* 已斩题目的恢复入口 */
+.restore-button {
+    display: flex;
+    height: 34rpx;
+    margin-top: 6rpx;
+    padding: 0 10rpx;
+    align-items: center;
+    justify-content: center;
+    border: 2rpx solid var(--accent-line);
+    border-radius: 2rpx;
+    color: var(--accent);
+    font-family: var(--font-sans);
+    font-size: 18rpx;
+    line-height: 1;
+    white-space: nowrap;
+}

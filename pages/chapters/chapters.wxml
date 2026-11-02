@@ -1,0 +1,25 @@
+<view class="page safe-bottom {{appearanceClass}}" style="{{rootStyle}}">
+    <view class="header">
+        <text class="header-title">章节练习</text>
+        <text class="header-subtitle">{{subjectShort}} · 按知识体系逐章突破，已练 {{totalPracticed}} 题</text>
+    </view>
+
+    <view class="chapter-list">
+        <view class="chapter-card card" wx:for="{{chapters}}" wx:key="name" data-index="{{item.index}}" bindtap="startChapter" hover-class="tap-hover">
+            <view class="chapter-top">
+                <view class="chapter-label">{{item.label}}</view>
+                <view class="chapter-copy">
+                    <text class="chapter-name">{{item.shortName}}</text>
+                    <text class="chapter-count">共 {{item.total}} 题 · 已练 {{item.practiced}} 题</text>
+                </view>
+                <text class="chapter-arrow">›</text>
+            </view>
+            <view class="chapter-progress">
+                <view class="progress-track"><view class="progress-value" style="width: {{item.progress}}%;"></view></view>
+                <text class="progress-text">{{item.progress}}%</text>
+            </view>
+        </view>
+    </view>
+
+    <view class="source-note">章节名称与题目数量严格取自源题库</view>
+</view>

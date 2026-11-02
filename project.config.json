@@ -17,6 +17,10 @@
       {
         "type": "folder",
         "value": "design"
+      },
+      {
+        "type": "file",
+        "value": "README.md"
       }
     ],
     "include": []

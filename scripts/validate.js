@@ -589,7 +589,8 @@ const packageBytes = walk(root)
         && !file.includes(`${path.sep}docs${path.sep}`)
         && !file.includes(`${path.sep}design${path.sep}`)
         && !file.endsWith('.genie')
-        && !file.endsWith('.gitignore'))
+        && !file.endsWith('.gitignore')
+        && !file.endsWith('README.md'))
     .reduce((sum, file) => sum + fs.statSync(file).size, 0);
 assert(packageBytes < 2 * 1024 * 1024, '主包超过 2MB');
 

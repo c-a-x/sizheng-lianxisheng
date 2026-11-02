@@ -585,8 +585,11 @@ assert(appWxss.indexOf('--bg: #faf8f3;') === -1, '仍残留旧的米白底色');
 const packageBytes = walk(root)
     .filter((file) => !file.includes(`${path.sep}scripts${path.sep}`)
         && !file.includes(`${path.sep}.workbuddy${path.sep}`)
+        && !file.includes(`${path.sep}.git${path.sep}`)
         && !file.includes(`${path.sep}docs${path.sep}`)
-        && !file.includes(`${path.sep}design${path.sep}`))
+        && !file.includes(`${path.sep}design${path.sep}`)
+        && !file.endsWith('.genie')
+        && !file.endsWith('.gitignore'))
     .reduce((sum, file) => sum + fs.statSync(file).size, 0);
 assert(packageBytes < 2 * 1024 * 1024, '主包超过 2MB');
 

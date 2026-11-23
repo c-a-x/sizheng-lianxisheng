@@ -2,6 +2,7 @@ const backup = require('../../utils/backup.js');
 const store = require('../../utils/store.js');
 const appearance = require('../../utils/appearance.js');
 const prefs = require('../../utils/prefs.js');
+const share = require('../../utils/share.js');
 
 const ROLLBACK_KEY = 'sizheng_quiz_rollback_v1';
 const META_KEY = 'sizheng_quiz_backup_meta_v1';
@@ -351,5 +352,13 @@ Page({
                 wx.showToast({ title: '学习记录已清除', icon: 'success' });
             },
         });
+    },
+
+    onShareAppMessage() {
+        return share.buildMessage({ title: '思政练习生｜记录只存本机，可导出备份' });
+    },
+
+    onShareTimeline() {
+        return share.buildTimeline({ title: '思政练习生｜记录只存本机，可导出备份' });
     },
 });

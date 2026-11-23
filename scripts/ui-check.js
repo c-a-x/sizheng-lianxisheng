@@ -4,6 +4,7 @@ const root = path.resolve(__dirname, '..');
 
 const storage = {};
 const calls = { nav: [], tab: [], navUrl: '' };
+const userFiles = [];
 
 global.wx = {
     getStorageSync: (k) => storage[k],
@@ -17,6 +18,25 @@ global.wx = {
     setNavigationBarTitle() {},
     setNavigationBarColor(o) { calls.nav.push(o); },
     setTabBarStyle(o) { calls.tab.push(o); },
+    env: { USER_DATA_PATH: 'wxfile://usr' },
+    getFileSystemManager: () => ({
+        readdirSync: () => userFiles.slice(),
+        unlinkSync: (filePath) => {
+            const name = String(filePath).split('/').pop();
+            const index = userFiles.indexOf(name);
+            if (index === -1) throw new Error('file not found');
+            userFiles.splice(index, 1);
+        },
+        writeFileSync: (filePath) => {
+            const name = String(filePath).split('/').pop();
+            if (userFiles.indexOf(name) === -1) userFiles.push(name);
+        },
+        writeFile: (options) => {
+            const name = String(options.filePath).split('/').pop();
+            if (userFiles.indexOf(name) === -1) userFiles.push(name);
+            if (options.success) options.success();
+        },
+    }),
 };
 
 let config = null;
@@ -216,6 +236,112 @@ const slashedItem = slashPage.data.chapters.flatMap((c) => c.questions)[0] || {}
 check('已斩题目带恢复入口', () => `${slashedItem.id} ${slashedItem.statusText} isSlashed=${slashedItem.isSlashed}`);
 slashPage.restoreQuestion({ currentTarget: { dataset: { id: slashTarget.id } } });
 check('恢复斩题', () => `已斩=${!!store.load().slashed[slashTarget.id]} / 列表 ${slashPage.data.filteredCount} 题`);
+
+// 7.6) 回归：备份恢复 / 学科切换 / 斩题定时器 / 本地文件清理
+const backupUtil = require(path.join(root, 'utils/backup.js'));
+const exportUtil = require(path.join(root, 'utils/export.js'));
+
+check('恢复备份保留斩题', () => {
+    const target = question.getSubject('xixin').questions[3];
+    store.toggleSlash(target.id);
+    const snapshot = JSON.parse(JSON.stringify(store.load()));
+    store.replaceState(snapshot);
+    const kept = !!store.load().slashed[target.id];
+    store.toggleSlash(target.id);
+    if (!kept) throw new Error('斩题状态在恢复后丢失');
+    return 'slashed 保留';
+});
+
+check('切换学科清空会话上下文', () => {
+    storage.sizheng_catalog_context_v1 = { sessionId: session.id };
+    storage.sizheng_catalog_jump_v1 = { sessionId: session.id, questionId: 20001 };
+    const page = loadPage('pages/catalog/catalog.js');
+    page.onLoad({ subject: 'mayuan' });
+    if (page.activeSessionId !== session.id) throw new Error('未读到会话上下文');
+    page.switchSubject({ currentTarget: { dataset: { id: 'maogai' } } });
+    if (page.activeSessionId) throw new Error('activeSessionId 未清空');
+    if (storage.sizheng_catalog_context_v1 || storage.sizheng_catalog_jump_v1) {
+        throw new Error('上下文存储未清理');
+    }
+    return 'context 已清空';
+});
+
+check('斩题跳转定时器可清理', () => {
+    const fresh = store.createSession({
+        mode: 'sequence',
+        title: '斩题定时器测试',
+        questions: question.getSubject('xixin').questions.slice(20, 23),
+    });
+    const page = loadPage('pages/practice/practice.js');
+    page.onLoad({ session: fresh.id });
+    page.slashQuestion();
+    if (!page.slashTimer) throw new Error('未创建自动跳题定时器');
+    const slashedId = page.data.current.id;
+    page.onUnload();
+    if (page.slashTimer) throw new Error('离页后定时器未清理');
+    store.toggleSlash(slashedId);
+    return 'timer 已清理';
+});
+
+check('导出只保留最新一份', () => {
+    userFiles.push('思政练习生错题_20260101_1000.docx');
+    userFiles.push('思政练习生错题_20260102_1000.docx');
+    userFiles.push('思政练习生学习档案_20260102_1000.json');
+    const removed = exportUtil.pruneOldExports('思政练习生错题');
+    const stale = userFiles.indexOf('思政练习生错题_20260101_1000.docx');
+    const backupKept = userFiles.indexOf('思政练习生学习档案_20260102_1000.json');
+    userFiles.length = 0;
+    if (stale !== -1) throw new Error('旧导出未清理');
+    if (backupKept === -1) throw new Error('误删备份文件');
+    return `清理 ${removed} 个`;
+});
+
+check('备份只保留最新一份', () => {
+    userFiles.push('思政练习生学习档案_20260101_1000.json');
+    userFiles.push('思政练习生学习档案_20260102_1000.json');
+    backupUtil.pruneOldBackups();
+    const left = userFiles.length;
+    userFiles.length = 0;
+    if (left !== 1) throw new Error(`应保留 1 份，实际 ${left}`);
+    return '保留 1 份';
+});
+
+check('续答卡片按学科隔离', () => {
+    const other = store.createSession({
+        mode: 'sequence',
+        title: '毛中特 顺序练习',
+        questions: question.getSubject('maogai').questions.slice(0, 5),
+    });
+    const page = loadPage('pages/index/index.js');
+    store.setSubjectId('mayuan');
+    page.onShow();
+    const hiddenOnOther = !page.data.resumeSession;
+    store.setSubjectId('maogai');
+    page.onShow();
+    const shownOnOwner = !!page.data.resumeSession
+        && page.data.resumeSession.title.indexOf('毛中特') !== -1;
+    store.setSubjectId('mayuan');
+    store.completeSession(other.id);
+    if (!hiddenOnOther) throw new Error('别的学科也显示了续答卡片');
+    if (!shownOnOwner) throw new Error('本科目没有显示续答卡片');
+    return '按学科隔离';
+});
+
+check('搜索防抖 200ms', () => {
+    const page = loadPage('pages/catalog/catalog.js');
+    page.onLoad({ subject: 'mayuan' });
+    page.resetDirectory();
+    const before = page.data.filteredCount;
+    const target = question.getSubject('mayuan').questions[0];
+    page.handleSearchInput({ detail: { value: String(target.id) } });
+    if (!page.searchTimer) throw new Error('未创建防抖定时器');
+    if (page.data.filteredCount !== before) throw new Error('输入后立即重建了列表，防抖未生效');
+    page.flushSearch();
+    const after = page.data.filteredCount;
+    page.onUnload();
+    if (after !== 1) throw new Error(`落定后应命中 1 题，实际 ${after}`);
+    return `${before} → ${after}`;
+});
 
 // 8) 全部页面不再抛错
 results.forEach(([state, name, detail]) => console.log(`${state.padEnd(4)} ${name}  ${detail}`));

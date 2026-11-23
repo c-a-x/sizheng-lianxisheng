@@ -145,6 +145,7 @@ function replaceState(nextState) {
     state.records = nextState.records || {};
     state.wrong = nextState.wrong || {};
     state.favorites = nextState.favorites || {};
+    state.slashed = nextState.slashed || {};
     state.sessions = nextState.sessions || {};
     state.latestSessionId = nextState.latestSessionId || '';
     return save(state);

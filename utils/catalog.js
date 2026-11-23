@@ -69,6 +69,7 @@ function buildCatalog(config) {
     state.records = state.records || {};
     state.wrong = state.wrong || {};
     state.favorites = state.favorites || {};
+    state.slashed = state.slashed || {};
     const filter = FILTER_KEYS.indexOf(config.filter) !== -1 ? config.filter : 'all';
     const keyword = config.keyword || '';
     const expanded = config.expanded || {};

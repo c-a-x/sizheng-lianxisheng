@@ -2,11 +2,13 @@ const {
     subjects,
     DEFAULT_SUBJECT,
     getSubject,
+    getSubjectOfQuestion,
     shuffle,
 } = require('../../utils/question.js');
 const store = require('../../utils/store.js');
 const appearance = require('../../utils/appearance.js');
 const { scrollPageTo } = require('../../utils/ui.js');
+const share = require('../../utils/share.js');
 
 Page({
     data: {
@@ -61,7 +63,12 @@ Page({
         const attempts = records.reduce((sum, record) => sum + record.attempts, 0);
         const correct = records.reduce((sum, record) => sum + record.correct, 0);
         const practiced = records.length;
-        const resumeSession = store.getLatestSession();
+        const latest = store.getLatestSession();
+        // 只展示当前学科的续答入口，避免在马原页点「继续」跳进毛中特的练习
+        const latestSubject = latest && latest.questionIds.length
+            ? getSubjectOfQuestion(latest.questionIds[0])
+            : '';
+        const resumeSession = latest && latestSubject === subject.id ? latest : null;
         this.setData({
             subjectId: subject.id,
             subjectTitle: subject.title,
@@ -139,6 +146,14 @@ Page({
         const session = this.data.resumeSession;
         if (!session) return;
         wx.navigateTo({ url: `/pages/practice/practice?session=${session.id}` });
+    },
+
+    onShareAppMessage() {
+        return share.buildMessage({ title: '思政练习生｜马原·毛中特·新思想 1097 题' });
+    },
+
+    onShareTimeline() {
+        return share.buildTimeline({ title: '思政练习生｜马原·毛中特·新思想 1097 题' });
     },
 
 });

@@ -297,9 +297,37 @@ function buildDocx(questions, metaOptions) {
         buffer: createZip(files, date).buffer,
         documentXml,
         fileName: buildFileName(meta.filePrefix, date),
+        filePrefix: meta.filePrefix || '思政练习生',
         questionCount: questions.length,
         mimeType: DOCX_MIME,
     };
+}
+
+/* 本地文件空间上限 10MB：同类导出只保留最新一份，避免反复导出把空间写满 */
+function pruneOldExports(prefix) {
+    if (typeof wx === 'undefined' || typeof wx.getFileSystemManager !== 'function' || !wx.env) return 0;
+    const dir = wx.env.USER_DATA_PATH;
+    const safePrefix = String(prefix || '思政练习生');
+    const fs = wx.getFileSystemManager();
+    let names = [];
+    try {
+        names = fs.readdirSync(dir) || [];
+    } catch (error) {
+        return 0;
+    }
+    const matched = names
+        .filter((name) => name.indexOf(safePrefix) === 0 && /\.docx$/.test(name))
+        .sort();
+    let removed = 0;
+    matched.slice(0, Math.max(0, matched.length - 1)).forEach((name) => {
+        try {
+            fs.unlinkSync(`${dir}/${name}`);
+            removed += 1;
+        } catch (error) {
+            // 删不掉旧文件不影响本次导出
+        }
+    });
+    return removed;
 }
 
 function saveDocxFile(questions, metaOptions) {
@@ -319,11 +347,14 @@ function saveDocxFile(questions, metaOptions) {
         wx.getFileSystemManager().writeFile({
             filePath,
             data: generated.buffer,
-            success: () => resolve({
-                filePath,
-                fileName: generated.fileName,
-                questionCount: generated.questionCount,
-            }),
+            success: () => {
+                pruneOldExports(generated.filePrefix);
+                resolve({
+                    filePath,
+                    fileName: generated.fileName,
+                    questionCount: generated.questionCount,
+                });
+            },
             fail: reject,
         });
     });
@@ -332,5 +363,6 @@ function saveDocxFile(questions, metaOptions) {
 module.exports = {
     buildDocx,
     saveDocxFile,
+    pruneOldExports,
     formatDate,
 };

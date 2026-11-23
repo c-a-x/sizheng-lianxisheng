@@ -2,6 +2,7 @@ const { getChapters, getSubject, DEFAULT_SUBJECT } = require('../../utils/questi
 const store = require('../../utils/store.js');
 const appearance = require('../../utils/appearance.js');
 const { setTitle } = require('../../utils/ui.js');
+const share = require('../../utils/share.js');
 
 Page({
     data: {
@@ -84,5 +85,13 @@ Page({
             questions: pool,
         });
         wx.navigateTo({ url: `/pages/practice/practice?session=${session.id}&subject=${subject.id}` });
+    },
+
+    onShareAppMessage() {
+        return share.buildMessage({ title: '思政练习生｜挑一章，从头刷到尾' });
+    },
+
+    onShareTimeline() {
+        return share.buildTimeline({ title: '思政练习生｜挑一章，从头刷到尾' });
     },
 });

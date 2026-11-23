@@ -4,6 +4,7 @@ const { saveDocxFile } = require('../../utils/export.js');
 const store = require('../../utils/store.js');
 const appearance = require('../../utils/appearance.js');
 const { scrollPageTo, setTitle } = require('../../utils/ui.js');
+const share = require('../../utils/share.js');
 
 const CATALOG_UI_KEY = 'sizheng_catalog_ui_v1';
 const PENDING_JUMP_KEY = 'sizheng_catalog_jump_v1';
@@ -100,6 +101,13 @@ Page({
         this.visibleQuestions = [];
         this.selectedMap = {};
         this.uiState = Object.assign({}, this.uiState, { expanded: {} });
+        try {
+            // 换学科后旧会话上下文失效，否则 onShow 会把别的学科的「继续」横幅拉回来
+            wx.removeStorageSync(CATALOG_CONTEXT_KEY);
+            wx.removeStorageSync(PENDING_JUMP_KEY);
+        } catch (error) {
+            // 上下文清理失败不影响浏览
+        }
         wx.setNavigationBarTitle({ title: '题库' });
         this.setData({
             subjectId,
@@ -332,14 +340,38 @@ Page({
         this.uiState.keyword = keyword;
         this.uiState.scrollTop = 0;
         this.saveUiState();
-        this.setData({ keyword }, () => {
+        this.setData({ keyword });
+        this.scheduleSearch();
+    },
+
+    /* 输入防抖：重建一次 450 题的列表要一次约 100KB 的 setData，逐字重建会拖慢输入 */
+    scheduleSearch() {
+        this.cancelSearchTimer();
+        this.searchTimer = setTimeout(() => {
+            this.searchTimer = null;
             this.buildView();
             scrollPageTo(0, 0);
-        });
+        }, 200);
+    },
+
+    cancelSearchTimer() {
+        if (this.searchTimer) {
+            clearTimeout(this.searchTimer);
+            this.searchTimer = null;
+        }
+    },
+
+    /* 立即生效（点题、离开页面时调用，避免用旧列表算下标） */
+    flushSearch() {
+        if (!this.searchTimer) return false;
+        this.cancelSearchTimer();
+        this.buildView();
+        return true;
     },
 
     clearSearch() {
         this.cancelSelection();
+        this.cancelSearchTimer();
         this.uiState.keyword = '';
         this.uiState.scrollTop = 0;
         this.saveUiState();
@@ -353,6 +385,7 @@ Page({
         const filter = event.currentTarget.dataset.filter;
         if (VALID_FILTERS.indexOf(filter) === -1 || filter === this.uiState.filter) return;
         this.cancelSelection();
+        this.cancelSearchTimer();
         this.uiState.filter = filter;
         this.uiState.scrollTop = 0;
         this.saveUiState();
@@ -364,6 +397,7 @@ Page({
 
     resetDirectory() {
         this.cancelSelection();
+        this.cancelSearchTimer();
         this.uiState.filter = 'all';
         this.uiState.keyword = '';
         this.uiState.scrollTop = 0;
@@ -392,6 +426,8 @@ Page({
 
     selectQuestion(event) {
         const questionId = Number(event.currentTarget.dataset.id);
+        // 搜索还在防抖窗口里时先落定，否则会拿旧列表算下标
+        this.flushSearch();
         const session = this.activeSessionId ? store.getSession(this.activeSessionId) : null;
         this.saveUiState();
 
@@ -448,10 +484,20 @@ Page({
     },
 
     onHide() {
+        this.cancelSearchTimer();
         this.saveUiState();
     },
 
     onUnload() {
+        this.cancelSearchTimer();
         this.saveUiState();
+    },
+
+    onShareAppMessage() {
+        return share.buildMessage({ title: '思政练习生｜按章节刷题，错题自动归集' });
+    },
+
+    onShareTimeline() {
+        return share.buildTimeline({ title: '思政练习生｜按章节刷题，错题自动归集' });
     },
 });

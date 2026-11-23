@@ -265,11 +265,40 @@ function makeBackupFileName(date) {
     return `思政练习生学习档案_${value.getFullYear()}${pad(value.getMonth() + 1)}${pad(value.getDate())}_${pad(value.getHours())}${pad(value.getMinutes())}${pad(value.getSeconds())}.json`;
 }
 
+const BACKUP_FILE_PREFIX = '思政练习生学习档案_';
+
+/* 本地文件空间上限 10MB：备份文件只保留最新一份 */
+function pruneOldBackups() {
+    if (typeof wx === 'undefined' || typeof wx.getFileSystemManager !== 'function' || !wx.env) return 0;
+    const dir = wx.env.USER_DATA_PATH;
+    const fs = wx.getFileSystemManager();
+    let names = [];
+    try {
+        names = fs.readdirSync(dir) || [];
+    } catch (error) {
+        return 0;
+    }
+    const matched = names
+        .filter((name) => name.indexOf(BACKUP_FILE_PREFIX) === 0 && /\.json$/.test(name))
+        .sort();
+    let removed = 0;
+    matched.slice(0, Math.max(0, matched.length - 1)).forEach((name) => {
+        try {
+            fs.unlinkSync(`${dir}/${name}`);
+            removed += 1;
+        } catch (error) {
+            // 删不掉旧备份不影响本次导出
+        }
+    });
+    return removed;
+}
+
 function writeBackupFileSync(state, date) {
     const generated = buildBackup(state, date);
     const fileName = makeBackupFileName(date);
     const filePath = `${wx.env.USER_DATA_PATH}/${fileName}`;
     wx.getFileSystemManager().writeFileSync(filePath, generated.text, 'utf8');
+    pruneOldBackups();
     return {
         filePath,
         fileName,
@@ -289,4 +318,5 @@ module.exports = {
     getStateSummary,
     makeBackupFileName,
     writeBackupFileSync,
+    pruneOldBackups,
 };

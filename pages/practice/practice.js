@@ -9,6 +9,7 @@ const store = require('../../utils/store.js');
 const appearance = require('../../utils/appearance.js');
 const prefs = require('../../utils/prefs.js');
 const { scrollPageTo, setTitle } = require('../../utils/ui.js');
+const share = require('../../utils/share.js');
 
 const PENDING_JUMP_KEY = 'sizheng_catalog_jump_v1';
 const CATALOG_CONTEXT_KEY = 'sizheng_catalog_context_v1';
@@ -156,6 +157,7 @@ Page({
     },
 
     renderCurrent() {
+        if (!this.session || !this.questions || !this.questions.length) return;
         const session = store.getSession(this.session.id) || this.session;
         this.session = session;
         const currentIndex = Math.max(0, Math.min(session.currentIndex, this.questions.length - 1));
@@ -223,11 +225,11 @@ Page({
     },
 
     gradeAnswer(answer) {
-        if (this.data.submitted) return;
+        if (this.data.submitted || !this.session || !this.data.current) return;
         const current = this.data.current;
         const correct = isCorrect(current, answer);
         store.answerQuestion(this.session.id, current, answer, correct);
-        this.session = store.getSession(this.session.id);
+        this.session = store.getSession(this.session.id) || this.session;
         this.renderCurrent();
         this.clearAutoNext();
         if (correct && this.data.autoNext && !this.data.isLast && !this.data.reviewMode) {
@@ -264,7 +266,8 @@ Page({
         if (slashed && !this.data.isLast) {
             this.clearAutoNext();
             const targetId = current.id;
-            setTimeout(() => {
+            this.slashTimer = setTimeout(() => {
+                this.slashTimer = null;
                 if (this.data.current && this.data.current.id === targetId) this.goNext();
             }, 420);
         }
@@ -296,6 +299,10 @@ Page({
         if (this.autoNextTimer) {
             clearTimeout(this.autoNextTimer);
             this.autoNextTimer = null;
+        }
+        if (this.slashTimer) {
+            clearTimeout(this.slashTimer);
+            this.slashTimer = null;
         }
     },
 
@@ -334,6 +341,11 @@ Page({
 
     finishPractice() {
         const session = store.getSession(this.session.id);
+        if (!session) {
+            // 记录被清除或恢复覆盖后，原会话可能已不存在
+            this.goHome();
+            return;
+        }
         const results = Object.keys(session.results).map((id) => session.results[id]);
         const correct = results.filter(Boolean).length;
         const answered = Object.keys(session.submitted).length;
@@ -367,5 +379,13 @@ Page({
 
     goHome() {
         wx.reLaunch({ url: '/pages/index/index' });
+    },
+
+    onShareAppMessage() {
+        return share.buildMessage({ title: '思政练习生｜每题都有解析，离线也能刷' });
+    },
+
+    onShareTimeline() {
+        return share.buildTimeline({ title: '思政练习生｜每题都有解析，离线也能刷' });
     },
 });

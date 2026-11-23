@@ -582,6 +582,14 @@ assert.strictEqual(appearanceUtil.THEMES.length, 5, '外观主题应为 5 档');
 
 assert(appWxss.indexOf('--bg: #faf8f3;') === -1, '仍残留旧的米白底色');
 
+// 分享：小程序只在页面级定义 onShareAppMessage 才会点亮「转发」，朋友圈另需 onShareTimeline
+['pages/index/index.js', 'pages/catalog/catalog.js', 'pages/practice/practice.js',
+    'pages/chapters/chapters.js', 'pages/data/data.js'].forEach((file) => {
+    const code = fs.readFileSync(path.join(root, file), 'utf8');
+    assert(code.indexOf('onShareAppMessage()') !== -1, `${file} 缺少 onShareAppMessage，右上角转发会置灰`);
+    assert(code.indexOf('onShareTimeline()') !== -1, `${file} 缺少 onShareTimeline，无法分享到朋友圈`);
+});
+
 const packageBytes = walk(root)
     .filter((file) => !file.includes(`${path.sep}scripts${path.sep}`)
         && !file.includes(`${path.sep}.workbuddy${path.sep}`)
@@ -592,7 +600,8 @@ const packageBytes = walk(root)
         && !file.endsWith('.gitignore')
         && !file.endsWith('README.md'))
     .reduce((sum, file) => sum + fs.statSync(file).size, 0);
-assert(packageBytes < 2 * 1024 * 1024, '主包超过 2MB');
+// 平台上限是主包 2MB；这里按 1.6MB 卡，给提审留余量
+assert(packageBytes < 1.6 * 1024 * 1024, `主包超过 1.6MB（当前 ${(packageBytes / 1024).toFixed(0)}KB）`);
 
 console.log(JSON.stringify({
     result: 'PASS',
@@ -604,5 +613,5 @@ console.log(JSON.stringify({
     optionAnalysis: optionAnalysisCount,
     memoryTips: new Set(memoryTips).size,
     packageBytes,
-    tests: ['原答案未改动', '392题解析覆盖', '1567条选项解析', '特有记忆小注', '马原毛概逐项解析', '目录全题覆盖', '题号题干章节搜索', '未做错题收藏筛选', '章节折叠', '筛选与滚动恢复', '同组跳题', '跨组进度保留', '三学科切换与题量隔离', '错题Word导出', '跨章节自选导出', 'DOCX结构', '学习档案导出', '备份文件安全校验', '档案恢复', '恢复回滚', '清除本机记录', '判题', '错题记录与移除', '收藏', '断点续答', '底部三栏与页面引用', '主包大小'],
+    tests: ['原答案未改动', '392题解析覆盖', '1567条选项解析', '特有记忆小注', '马原毛概逐项解析', '目录全题覆盖', '题号题干章节搜索', '未做错题收藏筛选', '章节折叠', '筛选与滚动恢复', '同组跳题', '跨组进度保留', '三学科切换与题量隔离', '错题Word导出', '跨章节自选导出', 'DOCX结构', '学习档案导出', '备份文件安全校验', '档案恢复', '恢复回滚', '清除本机记录', '判题', '错题记录与移除', '收藏', '断点续答', '底部三栏与页面引用', '页面分享回调', '主包大小'],
 }, null, 2));

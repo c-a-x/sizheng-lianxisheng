@@ -21,7 +21,7 @@
 - 视图：WXML + WXSS（rpx 单位、Flex 布局、CSS 变量驱动的主题令牌）
 - 逻辑：原生 JavaScript
 - 存储：`wx.setStorageSync` + `wx.env.USER_DATA_PATH`（导出文件）
-- 主包约 1.8 MB，未使用分包
+- 主包约 1.5 MB，未使用分包
 
 ## 目录结构
 
@@ -66,4 +66,4 @@ node scripts/ui-check.js   # 页面级烟雾测试：五主题 × 五字号 × �
 
 ## 开发说明
 
-`scripts/bank/` 下保留了题库抽取脚本，源文档更新后可重新生成 `data/` 下的数据文件。这些脚本与 `docs/`、`design/` 一起在 `project.config.json` 的 `packOptions.ignore` 中排除，不会打进小程序包。
+`scripts/bank/` 下保留了题库抽取脚本，源文档更新后可重新生成 `data/` 下的数据文件；重新生成后跑一次 `node scripts/bank/compact_data.js` 压回紧凑存储（选项存文本数组、章节存编号），`utils/question.js` 两种格式都能读。这些脚本与 `docs/`、`design/` 一起在 `project.config.json` 的 `packOptions.ignore` 中排除，不会打进小程序包。

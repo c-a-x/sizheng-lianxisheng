@@ -9,6 +9,9 @@ const annotationMap = Object.assign({}, mayuanAnnotations, maogaiAnnotations, an
 
 const DEFAULT_SUBJECT = 'mayuan';
 
+const OPTION_KEYS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+const TYPE_TEXT = { single: '单选题', multiple: '多选题', judge: '判断题' };
+
 const DEFINITIONS = [
     {
         id: 'mayuan',
@@ -18,6 +21,7 @@ const DEFINITIONS = [
         eyebrow: '马原刷题助手',
         tag: '马',
         source: mayuanQuestions,
+        chapterNames: mayuanQuestions.chapters || [],
     },
     {
         id: 'maogai',
@@ -27,6 +31,7 @@ const DEFINITIONS = [
         eyebrow: '毛中特刷题助手',
         tag: '毛',
         source: maogaiQuestions,
+        chapterNames: maogaiQuestions.chapters || [],
     },
     {
         id: 'xixin',
@@ -36,12 +41,32 @@ const DEFINITIONS = [
         eyebrow: '新思想学习助手',
         tag: '习',
         source: xixinQuestions,
+        chapterNames: xixinQuestions.chapters || [],
     },
 ];
+
+/* 数据层可能存压缩格式：选项是纯文本数组，章节是编号 c，题型文案可省略 */
+function normalizeOptions(rawOptions) {
+    return (rawOptions || []).map((option, index) => (
+        typeof option === 'string'
+            ? { key: OPTION_KEYS[index] || String(index + 1), text: option }
+            : option
+    ));
+}
+
+function resolveChapter(question, chapterNames) {
+    if (typeof question.chapter === 'number') return chapterNames[question.chapter] || '';
+    if (question.chapter) return question.chapter;
+    if (typeof question.c === 'number') return chapterNames[question.c] || '';
+    return '';
+}
 
 function enrich(question, subject) {
     const annotation = annotationMap[question.id] || {};
     return Object.assign({}, question, {
+        chapter: resolveChapter(question, subject.chapterNames),
+        typeText: question.typeText || TYPE_TEXT[question.type] || '单选题',
+        options: normalizeOptions(question.options),
         subject: subject.id,
         subjectName: subject.short,
         solution: annotation.solution || question.explanation || '',
@@ -77,6 +102,7 @@ const subjects = DEFINITIONS.map((definition) => {
         title: definition.title,
         eyebrow: definition.eyebrow,
         tag: definition.tag,
+        chapterNames: definition.chapterNames,
         questions: list,
         total: list.length,
         chapters: buildChapters(list),
